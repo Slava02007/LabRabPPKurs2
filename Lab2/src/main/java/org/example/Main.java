@@ -1,3 +1,5 @@
+package org.example;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,13 +15,11 @@ public class Main {
 
         int[][] matrix = new int[n][m];
 
-
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 matrix[i][j] = random.nextInt(10);
             }
         }
-
 
         System.out.println("\nСгенерированная матрица:");
         for (int i = 0; i < n; i++) {
@@ -29,17 +29,23 @@ public class Main {
             System.out.println();
         }
 
-
         System.out.println("\nМинимальный элемент в матрице который встречается один раз:");
-        System.out.println(minElement(matrix));
+        try {
+            System.out.println(minElement(matrix));
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
         sc.close();
     }
 
     static int minElement(int matrix[][]){
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            throw new RuntimeException("Матрица пустая");
+        }
+
         int n = matrix.length;
         int m = matrix[0].length;
         int k = 0;
-
 
         int[] Arr = new int[n * m];
 
@@ -62,7 +68,6 @@ public class Main {
             }
         }
 
-
         if (k == 0) {
             throw new RuntimeException("Нет уникальных элементов");
         }
@@ -77,4 +82,3 @@ public class Main {
         return min;
     }
 }
-
