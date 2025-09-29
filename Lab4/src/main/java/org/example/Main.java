@@ -1,5 +1,6 @@
 package org.example;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,14 +8,17 @@ public class Main {
         Map<String, Integer> map = new HashMap<>();
         List<String> text = new ArrayList<>();
 
-        System.out.println("Введите текст:");
-        while (true) {
-            String line = scanner.nextLine().trim();
-            if (line.isEmpty()) {
-                break;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("D:/Book.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.add(line);
             }
-            text.add(line);
+        } catch (IOException e) {
+            System.out.println("Ошибка при чтении файла: " + e.getMessage());
+            return;
         }
+
 
         System.out.println("Введите слова для поиска:");
         while (true) {
