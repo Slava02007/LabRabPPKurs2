@@ -114,9 +114,10 @@ public class Main {
     }
 
     static void writeStudents(String filename, Collection<Student> students) throws IOException {
-        try (PrintWriter out = new PrintWriter(filename)) {
+        try (PrintWriter out = new PrintWriter(new FileWriter(filename, true))) {
             for (Student s : students) {
                 out.println(s);
+
             }
         }
     }

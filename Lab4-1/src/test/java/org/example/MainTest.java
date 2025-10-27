@@ -1,91 +1,97 @@
 package org.example;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 import org.junit.jupiter.api.*;
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 
+class MainTest {
 
-public class MainTest {
+    private static final String FILE1 = "test_file1.txt";
+    private static final String FILE2 = "test_file2.txt";
+    private static final String OUTFILE = "test_out.txt";
 
-    private static final String FILE1 = "f1.txt";
-    private static final String FILE2 = "f2.txt";
-    private static final String RESULT = "out.txt";
+    @BeforeEach
+    void setUp() throws IOException {
+        // создаём временные файлы с тестовыми данными
+        Files.writeString(Path.of(FILE1), """
+                1 Ivan 101 4,5
+                2 Maria 102 3,9
+                3 Alex 103 4,2
+                """);
 
-    @BeforeAll
-    static void setup() throws IOException {
-
-        new File("src/test/java/resources").mkdirs();
-
-        try (PrintWriter out = new PrintWriter(FILE1)) {
-            out.println("101 Иванов 1 4,5");
-            out.println("102 Петров 1 3,8");
-            out.println("103 Сидоров 2 4,1");
-        }
-
-        try (PrintWriter out = new PrintWriter(FILE2)) {
-            out.println("102 Петров 1 3,8");
-            out.println("104 Смирнов 3 4,7");
-        }
+        Files.writeString(Path.of(FILE2), """
+                3 Alex 103 4,2
+                4 Olga 104 4,8
+                5 Petr 105 3,7
+                """);
     }
 
-    @AfterAll
-    static void cleanup() {
-        new File(FILE1).delete();
-        new File(FILE2).delete();
-        new File(RESULT).delete();
+    @AfterEach
+    void tearDown() throws IOException {
+        Files.deleteIfExists(Path.of(FILE1));
+        Files.deleteIfExists(Path.of(FILE2));
+        Files.deleteIfExists(Path.of(OUTFILE));
     }
 
     @Test
-    void testUnion() throws Exception {
+    void testReadStudents() throws IOException {
+        List<Student> students = Main.readStudents(FILE1);
+        assertEquals(3, students.size());
+        assertEquals("Ivan", students.get(0).name);
+    }
+
+    @Test
+    void testWriteStudents() throws IOException {
+        List<Student> students = List.of(
+                new Student(10, "Test", 999, 5.0)
+        );
+        Main.writeStudents(OUTFILE, students);
+
+        String content = Files.readString(Path.of(OUTFILE)).trim();
+        assertEquals("10 Test 999 5.0", content);
+    }
+
+    @Test
+    void testUnionOperation() throws IOException {
         List<Student> list1 = Main.readStudents(FILE1);
         List<Student> list2 = Main.readStudents(FILE2);
 
-        Set<Student> result = new HashSet<>();
-        result.addAll(list1);
+        Set<Student> result = new HashSet<>(list1);
         result.addAll(list2);
 
-        Main.writeStudents(RESULT, result);
-
-        List<Student> res = Main.readStudents(RESULT);
-        assertEquals(4, res.size(), "Объединение должно содержать 4 записи");
+        assertEquals(5, result.size(), "Объединение должно содержать 5 студентов");
     }
 
     @Test
-    void testIntersection() throws Exception {
+    void testIntersectionOperation() throws IOException {
         List<Student> list1 = Main.readStudents(FILE1);
         List<Student> list2 = Main.readStudents(FILE2);
 
         Set<Student> result = new HashSet<>();
-        for (Student s : list1)
-            if (list2.contains(s))
-                result.add(s);
+        for (Student s : list1) {
+            if (list2.contains(s)) result.add(s);
+        }
 
-        Main.writeStudents(RESULT, result);
-
-        List<Student> res = Main.readStudents(RESULT);
-        assertEquals(1, res.size(), "Пересечение должно содержать 1 запись");
-        assertEquals(102, res.get(0).num, "Общий студент — с номером 102");
+        assertEquals(1, result.size());
+        assertTrue(result.contains(new Student(3, "Alex", 103, 4.2)));
     }
 
     @Test
-    void testDifference() throws Exception {
+    void testDifferenceOperation() throws IOException {
         List<Student> list1 = Main.readStudents(FILE1);
         List<Student> list2 = Main.readStudents(FILE2);
 
         Set<Student> result = new HashSet<>();
-        for (Student s : list1)
-            if (!list2.contains(s))
-                result.add(s);
+        for (Student s : list1) {
+            if (!list2.contains(s)) result.add(s);
+        }
 
-        Main.writeStudents(RESULT, result);
-
-        List<Student> res = Main.readStudents(RESULT);
-        assertEquals(2, res.size(), "Разность должна содержать 2 записи");
-        assertTrue(res.stream().anyMatch(s -> s.num == 101));
-        assertTrue(res.stream().anyMatch(s -> s.num == 103));
+        assertEquals(2, result.size());
+        assertTrue(result.contains(new Student(1, "Ivan", 101, 4.5)));
+        assertTrue(result.contains(new Student(2, "Maria", 102, 3.9)));
     }
 }
