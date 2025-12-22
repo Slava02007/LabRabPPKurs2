@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Вход в Библиотеку</title></head>
+<body style="text-align:center; margin-top:50px;">
+<h2>Вход в систему</h2>
+<form th:action="@{/login}" method="post">
+    <p><input type="text" name="username" placeholder="Логин (lib / reader)" required/></p>
+    <p><input type="password" name="password" placeholder="Пароль" required/></p>
+    <button type="submit">Войти</button>
+</form>
+<p>Для теста: <b>lib/lib</b> (библиотекарь) или <b>reader/123</b> (читатель)</p>
+</body>
+</html>

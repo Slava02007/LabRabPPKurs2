@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<users>
+    <user username="lib">
+        <password>{noop}lib</password> <!-- Пароль: lib -->
+        <role>LIBRARIAN</role>
+        <books></books>
+    </user>
+    <user username="reader">
+        <password>{noop}123</password> <!-- Пароль: 123 -->
+        <role>READER</role>
+        <books></books>
+    </user>
+</users>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Личный кабинет</title></head>
+<body>
+<h1>Личный кабинет</h1>
+<a href="/reader/dashboard">В каталог</a>
+
+<h3>Ваш профиль</h3>
+<p>Логин: <span th:text="${user.username}"></span></p>
+
+<h3>Ваши книги</h3>
+<ul>
+    <li th:each="book : ${myBooks}">
+        <span th:text="${book.title}"></span> - <span th:text="${book.author}"></span>
+    </li>
+</ul>
+<p th:if="${#lists.isEmpty(myBooks)}">Вы пока не взяли ни одной книги.</p>
+</body>
+</html>

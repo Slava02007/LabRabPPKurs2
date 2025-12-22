@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Читатели</title></head>
+<body>
+<h1>Список читателей</h1>
+<a href="/librarian/dashboard">Назад</a>
+<ul>
+    <li th:each="user : ${users}">
+        <b th:text="${user.username}"></b> (Роль: <span th:text="${user.role}"></span>)
+        <br/>Взятые книги (ID): <span th:text="${user.borrowedBookIds}"></span>
+    </li>
+</ul>
+</body>
+</html>

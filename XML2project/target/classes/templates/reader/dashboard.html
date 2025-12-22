@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Каталог</title>
+    <style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }</style>
+</head>
+<body>
+<h1>Каталог книг</h1>
+<nav>
+    <a href="/reader/dashboard">Каталог</a> |
+    <a href="/reader/account">Личный кабинет</a> |
+    <form th:action="@{/logout}" method="post" style="display:inline;"><button>Выход</button></form>
+</nav>
+
+<h3>Поиск</h3>
+<form th:action="@{/reader/search}" method="get">
+    <select name="criteria">
+        <option value="author">Автор</option>
+        <option value="year">Год</option>
+        <option value="category">Категория</option>
+    </select>
+    <input type="text" name="value" placeholder="Значение..." required/>
+    <button type="submit">Найти</button>
+    <a href="/reader/dashboard"><button type="button">Сброс</button></a>
+</form>
+
+<br/>
+<table>
+    <tr>
+        <th>Название</th><th>Автор</th><th>Год</th><th>Категория</th><th>В наличии</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.year}"></td>
+        <td th:text="${book.category}"></td>
+        <td th:text="${book.count}"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><library>
+    <book id="1">
+        <title>Война и мир</title>
+        <author>Толстой</author>
+        <year>1869</year>
+        <category>Роман</category>
+        <price>1500.0</price>
+        <count>4</count>
+    </book>
+    <book id="2">
+        <title>Java Философия</title>
+        <author>Эккель</author>
+        <year>2015</year>
+        <category>Обучение</category>
+        <price>3000.0</price>
+        <count>2</count>
+    </book>
+</library>
